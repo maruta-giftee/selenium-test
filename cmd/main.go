@@ -3,7 +3,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"os"
 
@@ -15,7 +14,7 @@ func main() {
 	// Open file
 	filePath := flag.String("f", "file", "file path")
 	flag.Parse()
-	fmt.Println("file path: " + *filePath)
+	log.Println("file path: " + *filePath)
 	file, err := os.Open(*filePath)
 	if err != nil {
 		log.Fatalf("open file error %#v\n", err)
@@ -49,8 +48,23 @@ func main() {
 		if err := page.Navigate(input.URL); err != nil {
 			log.Fatalf("Failed to navigate:%v", err)
 		}
-
+		// 力技でアイテムの整合性を確認
+		item, err := page.AllByXPath("//p").At(1).Text()
+		if err != nil || item != input.Item {
+			log.Fatalf("Mismatch Item: Value = %#v, Error = %v", item, err)
+		}
+		// 力技で店舗の整合性を確認
+		name, err := page.AllByXPath("//p").At(3).Text()
+		if err != nil || name != "店舗名:"+input.Name {
+			log.Fatalf("Mismatch Name: Value = %#v, Error = %v", name, err)
+		}
+		// 力技で期限の整合性を確認
+		limit, err := page.AllByXPath("//p").At(6).Text()
+		if err != nil || limit != "引換期限"+input.Limit {
+			log.Fatalf("Mismatch Limit: Value = %#v, Error = %v", limit, err)
+		}
+		// log.Println("(" + name + "," + item + "," + limit + ")")
 		page.Screenshot("./_tools/output/" + input.Name + ".png")
-		fmt.Printf("OK: %s ( %s )\n", input.Name, input.URL)
+		log.Printf("OK: %s ( %s )\n", input.Name, input.URL)
 	}
 }
