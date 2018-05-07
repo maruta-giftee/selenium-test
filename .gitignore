@@ -1,2 +1,4 @@
-_tools/output/*
-_tools/input.csv
+_tools/esso/output/*
+_tools/esso/input.csv
+_tools/amex/input.txt
+_tools/amex/output/*
