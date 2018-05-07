@@ -37,7 +37,7 @@ func main() {
 		return
 	}
 
-	// Parse CSV file by parser
+	// Parse file by parser
 	inputs := parser.ParseList(file)
 	if err != nil {
 		log.Fatalf("Failed in parse csv file :%v", err)
