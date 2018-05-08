@@ -6,9 +6,9 @@ OR
 `go run cmd/esso/main.go -f _tools/esso/sample.csv`
 
 ## USAGE of Amex
-`./bin/amex -f ./_tools/amex/sample.csv`
+`./bin/amex -f ./_tools/amex/input.txt`
 OR
-`go run cmd/amex/main.go -f _tools/amex/sample.csv`
+`go run cmd/amex/main.go -f _tools/amex/input.txt`
 
 ## build
 `./_tools/build.sh`
