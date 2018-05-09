@@ -25,7 +25,7 @@ func main() {
 	// New SeleniumDriver
 	driver := chrome.NewDriver()
 	if err := driver.Start(); err != nil {
-		log.Fatalf("Failed to start driver:%v", err)
+		log.Fatalf("Failed to start driver: %v", err)
 	}
 	defer driver.Stop()
 
