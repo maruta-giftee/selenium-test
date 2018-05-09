@@ -29,7 +29,7 @@ func worker(scCh <-chan scenario, drvCh chan selenium.Driver) {
 		// New Page from SeleniumDriver
 		page, err := driver.NewPage()
 		if err != nil {
-			log.Fatalf("Failed to open page:%v", err)
+			log.Fatalf("Failed to open page: %v", err)
 			return
 		}
 		if err := page.Navigate(sc.url); err != nil {
