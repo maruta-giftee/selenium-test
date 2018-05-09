@@ -32,21 +32,21 @@ func main() {
 	// New Page from SeleniumDriver
 	page, err := driver.NewPage()
 	if err != nil {
-		log.Fatalf("Failed to open page:%v", err)
+		log.Fatalf("Failed to open page: %v", err)
 		return
 	}
 
 	// Parse CSV file by parser
 	inputs, err := parser.ParseCSV(file)
 	if err != nil {
-		log.Fatalf("Failed in parse csv file :%v", err)
+		log.Fatalf("Failed in parse csv file: %v", err)
 		return
 	}
 
 	// run
 	for _, input := range inputs {
 		if err := page.Navigate(input.URL); err != nil {
-			log.Fatalf("Failed to navigate:%v", err)
+			log.Fatalf("Failed to navigate: %v", err)
 		}
 		// <p> 要素を取得
 		xpath := page.AllByXPath("//p")
