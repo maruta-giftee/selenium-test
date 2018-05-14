@@ -1,4 +1,5 @@
 # selenium-test
+automatic access test pages
 
 ## USAGE of ESSO
 `./bin/esso -f ./_tools/esso/sample.csv`
