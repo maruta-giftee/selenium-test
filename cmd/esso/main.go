@@ -5,6 +5,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/maruta-giftee/selenium-test/parser"
 	"github.com/maruta-giftee/selenium-test/selenium/chrome"
@@ -44,7 +45,7 @@ func main() {
 	}
 
 	// run
-	for _, input := range inputs {
+	for i, input := range inputs {
 		if err := page.Navigate(input.URL); err != nil {
 			log.Fatalf("Failed to navigate: %v", err)
 		}
@@ -65,7 +66,7 @@ func main() {
 		if err != nil || limit != "引換期限"+input.Limit {
 			log.Fatalf("Mismatch Limit: Value = %#v, Error = %v", limit, err)
 		}
-		page.Screenshot("./_tools/esso/output/" + input.Name + ".png")
+		page.Screenshot("./_tools/esso/output/" + strconv.Itoa(i) + "-" + input.Name + ".png")
 		log.Printf("OK: %s ( %s )\n", input.Name, input.URL)
 	}
 }

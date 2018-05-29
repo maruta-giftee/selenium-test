@@ -1,0 +1,50 @@
+@startuml チケット確認
+
+title チケット確認
+
+actor CLI <<user>>
+participant Go <<Application>>
+participant Selenium
+
+CLI -> Go : go run `CSV file`
+
+activate Go
+
+create Selenium
+Go -> Selenium : chrome.NewDriver()
+activate Selenium
+
+create Pages
+Selenium -> Pages : driver.NewPage()
+activate Pages
+deactivate Selenium
+opt selenium起動エラー処理
+  Go <-- Selenium : エラーオブジェクト
+  Go <-- Pages    : エラーオブジェクト
+  CLI <-- Go      : エラーレスポンス
+end
+Go -> Go  : read CSV
+activate Go
+deactivate Go
+opt ファイル読み込み失敗
+  CLI <-- Go : エラーレスポンス
+end
+
+loop 対象店舗全件
+  Go -> Pages : page.Navigate(URL)
+  Go -> Pages : 店舗名確認
+  Go -> Pages : 商品名確認
+  Go -> Pages : 期限確認
+  Go -> Go  : print screen shot
+  activate Go
+  deactivate Go
+  opt いずれかでエラー
+    CLI <-- Go : エラーレスポンス
+  end
+end
+
+destroy Pages
+destroy Selenium
+deactivate Go
+
+@enduml
