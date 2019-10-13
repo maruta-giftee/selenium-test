@@ -2,3 +2,5 @@ _tools/esso/output/*
 _tools/esso/input.csv
 _tools/amex/input.txt
 _tools/amex/output/*
+_tools/saintmarc/output/*
+_tools/saintmarc/input.csv

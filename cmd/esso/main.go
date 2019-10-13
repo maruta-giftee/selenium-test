@@ -3,17 +3,77 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
 
 	"github.com/maruta-giftee/selenium-test/parser"
 	"github.com/maruta-giftee/selenium-test/selenium/chrome"
+	"github.com/sclevine/agouti"
 )
+
+//
+func run(page *agouti.Page, inputs []*parser.Input) {
+	for i, input := range inputs {
+
+		if err := page.Navigate(input.URL); err != nil {
+			log.Fatalf("Failed to navigate: %v", err)
+		}
+		// <p> 要素を取得
+		xpath := page.AllByXPath("//p")
+		// 力技でアイテムの整合性を確認
+		item, err := xpath.At(1).Text()
+		if err != nil || item != input.Item {
+			log.Fatalf("Mismatch Item: Value = %#v, Error = %v", item, err)
+		}
+		// 力技で店舗の整合性を確認
+		name, err := xpath.At(3).Text()
+		if err != nil || name != "店舗名:"+input.Name {
+			log.Fatalf("Mismatch Name: Value = %#v, Error = %v", name, err)
+		}
+		// 力技で期限の整合性を確認
+		limit, err := xpath.At(4).Text()
+		if err != nil || limit != "引換期限"+input.Limit {
+			log.Fatalf("Mismatch Limit: Value = %#v, Error = %v", limit, err)
+		}
+		page.Screenshot("./_tools/esso/output/" + strconv.Itoa(i) + "-" + input.Name + ".png")
+		log.Printf("OK: %s ( %s )\n", input.Name, input.URL)
+	}
+}
+
+// old version
+func _run(page *agouti.Page, inputs []*parser.Input) {
+	for i, input := range inputs {
+
+		if err := page.Navigate(input.URL); err != nil {
+			log.Fatalf("Failed to navigate: %v", err)
+		}
+		// <p> 要素を取得
+		xpath := page.AllByXPath("//p")
+		// 力技でアイテムの整合性を確認
+		item, err := xpath.At(1).Text()
+		if err != nil || item != input.Item {
+			log.Fatalf("Mismatch Item: Value = %#v, Error = %v", item, err)
+		}
+		// 力技で店舗の整合性を確認
+		name, err := xpath.At(3).Text()
+		if err != nil || name != "店舗名:"+input.Name {
+			log.Fatalf("Mismatch Name: Value = %#v, Error = %v", name, err)
+		}
+		// 力技で期限の整合性を確認
+		limit, err := xpath.At(6).Text()
+		if err != nil || limit != "引換期限"+input.Limit {
+			log.Fatalf("Mismatch Limit: Value = %#v, Error = %v", limit, err)
+		}
+		page.Screenshot("./_tools/esso/output/" + strconv.Itoa(i) + "-" + input.Name + ".png")
+		log.Printf("OK: %s ( %s )\n", input.Name, input.URL)
+	}
+}
 
 func main() {
 	// Open file
-	filePath := flag.String("f", "file", "file path")
+	filePath := flag.String("f", "_tools/esso/input.csv", "file path")
 	flag.Parse()
 	log.Println("file path: " + *filePath)
 	file, err := os.Open(*filePath)
@@ -45,28 +105,6 @@ func main() {
 	}
 
 	// run
-	for i, input := range inputs {
-		if err := page.Navigate(input.URL); err != nil {
-			log.Fatalf("Failed to navigate: %v", err)
-		}
-		// <p> 要素を取得
-		xpath := page.AllByXPath("//p")
-		// 力技でアイテムの整合性を確認
-		item, err := xpath.At(1).Text()
-		if err != nil || item != input.Item {
-			log.Fatalf("Mismatch Item: Value = %#v, Error = %v", item, err)
-		}
-		// 力技で店舗の整合性を確認
-		name, err := xpath.At(3).Text()
-		if err != nil || name != "店舗名:"+input.Name {
-			log.Fatalf("Mismatch Name: Value = %#v, Error = %v", name, err)
-		}
-		// 力技で期限の整合性を確認
-		limit, err := xpath.At(6).Text()
-		if err != nil || limit != "引換期限"+input.Limit {
-			log.Fatalf("Mismatch Limit: Value = %#v, Error = %v", limit, err)
-		}
-		page.Screenshot("./_tools/esso/output/" + strconv.Itoa(i) + "-" + input.Name + ".png")
-		log.Printf("OK: %s ( %s )\n", input.Name, input.URL)
-	}
+	run(page, inputs)
+	fmt.Println("done.")
 }
